@@ -1,0 +1,61 @@
+import { Router } from "express";
+// import passport from "passport";
+import {
+  registeruser,
+  loginuser,
+  logoutUser,
+  refreshAccessToken,
+  getCurrentUser,
+  updateUserProfile,
+  changeCurrentPassword,
+  updateAvatar,
+  searchMentors,
+} from "../controllers/user.controller.js";
+import { verifyJWT } from "../middleware/auth.middleware.js";
+import { upload } from "../middleware/multer.middleware.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
+
+const router = Router();
+
+// Public routes
+router.route("/registeruser").post(registeruser);
+router.route("/login").post(loginuser);
+router.route("/refresh-token").post(refreshAccessToken);
+
+// Google OAuth
+// router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
+// router.get(
+//   "/google/callback",
+//   passport.authenticate("google", {
+//     failureRedirect: "/auth?error=google_failed",
+//     session: false,
+//   }),
+//   async (req, res) => {
+//     try {
+//       if (!req.user) {
+//         return res.redirect("/auth?error=user_not_found");
+//       }
+
+//       const accessToken = req.user.generateAccessToken();
+
+//       res.redirect(
+//         `https://aifrontend-ce3u.vercel.app/auth?token=${accessToken}&userId=${req.user._id}`
+//       );
+//     } catch (error) {
+//       console.error("Google Callback Error:", error);
+//       res.redirect("/auth?error=server_error");
+//     }
+//   }
+// );
+
+// Protected routes — verifyJWT ke peeche
+router.route("/me").get(verifyJWT, async (req, res) => {
+  return res.json(new ApiResponse(200, req.user, "User profile fetched successfully"));
+});
+router.route("/logout").post(verifyJWT, logoutUser);
+router.route("/update-profile").patch(verifyJWT, updateUserProfile);
+router.route("/change-password").post(verifyJWT, changeCurrentPassword);
+router.route("/update-avatar").patch(verifyJWT, upload.single("avatar"), updateAvatar);
+router.route("/search").get(verifyJWT, searchMentors);
+
+export default router;
