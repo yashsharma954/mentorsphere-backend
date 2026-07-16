@@ -5,6 +5,14 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { User } from "../models/user.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
+// Local dev (http://localhost) mein secure:true cookie ko silently drop kar deta hai.
+// Production (https) mein secure:true zaroori hai. Isliye environment-aware.
+const cookieOptions = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+};
+
 const generateAccessAndRefereshTokens = async (userId) => {
   try {
     const user = await User.findById(userId);
@@ -34,7 +42,6 @@ const registeruser = asyncHandler(async (req, res) => {
     throw new ApiError(400, "password is required");
   }
   if (!role || !["student", "mentor", "recruiter"].includes(role)) {
-    // admin registration form se allow nahi — security ke liye manually banega
     throw new ApiError(400, "role must be one of: student, mentor, recruiter");
   }
 
@@ -90,15 +97,10 @@ const loginuser = asyncHandler(async (req, res) => {
 
   const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
 
-  const options = {
-    httpOnly: true,
-    secure: true,
-  };
-
   return res
     .status(200)
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options)
+    .cookie("accessToken", accessToken, cookieOptions)
+    .cookie("refreshToken", refreshToken, cookieOptions)
     .json(
       new ApiResponse(
         200,
@@ -115,15 +117,10 @@ const logoutUser = asyncHandler(async (req, res) => {
     { new: true }
   );
 
-  const options = {
-    httpOnly: true,
-    secure: true,
-  };
-
   return res
     .status(200)
-    .clearCookie("accessToken", options)
-    .clearCookie("refreshToken", options)
+    .clearCookie("accessToken", cookieOptions)
+    .clearCookie("refreshToken", cookieOptions)
     .json(new ApiResponse(200, {}, "User logged out"));
 });
 
@@ -150,15 +147,13 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
       throw new ApiError(401, "Refresh token is expired or used");
     }
 
-    const options = { httpOnly: true, secure: true };
-
     const { accessToken, refreshToken: newRefreshToken } =
       await generateAccessAndRefereshTokens(user._id);
 
     return res
       .status(200)
-      .cookie("accessToken", accessToken, options)
-      .cookie("refreshToken", newRefreshToken, options)
+      .cookie("accessToken", accessToken, cookieOptions)
+      .cookie("refreshToken", newRefreshToken, cookieOptions)
       .json(
         new ApiResponse(
           200,
@@ -258,21 +253,60 @@ const updateAvatar = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, user, "Avatar updated successfully"));
 });
 
-// Search/filter mentors, students, recruiters — Home page ke "Smart Search" feature ke liye
+const updateResume = asyncHandler(async (req, res) => {
+  const resumeLocalPath = req.file?.path;
+
+  if (!resumeLocalPath) {
+    throw new ApiError(400, "Resume file is missing");
+  }
+
+  const resume = await uploadOnCloudinary(resumeLocalPath);
+
+  if (!resume?.url) {
+    throw new ApiError(400, "Error while uploading resume");
+  }
+
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    { $set: { resumeUrl: resume.url } },
+    { new: true }
+  ).select("-password -refreshToken");
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, user, "Resume updated successfully"));
+});
+
 const searchMentors = asyncHandler(async (req, res) => {
-  const { role, branch, skills, year } = req.query;
+  const { role, branch, skills, year, name } = req.query;
 
   const filter = {};
   if (role) filter.role = role;
   if (branch) filter.branch = branch;
   if (year) filter.year = year;
   if (skills) filter.skills = { $in: skills.split(",") };
+  if (name) filter.fullName = { $regex: name, $options: "i" }; // case-insensitive partial match
 
   const users = await User.find(filter).select("-password -refreshToken");
 
   return res
     .status(200)
     .json(new ApiResponse(200, users, "Users fetched successfully"));
+});
+
+// Kisi bhi user ka public profile — search/connections list se click karke dekhne ke liye
+const getUserById = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+
+  const user = await User.findById(userId).select("-password -refreshToken");
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, user, "User profile fetched successfully"));
 });
 
 export {
@@ -284,5 +318,7 @@ export {
   updateUserProfile,
   changeCurrentPassword,
   updateAvatar,
+  updateResume,
   searchMentors,
+  getUserById,
 };

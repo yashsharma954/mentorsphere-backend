@@ -9,7 +9,9 @@ import {
   updateUserProfile,
   changeCurrentPassword,
   updateAvatar,
+  updateResume,
   searchMentors,
+  getUserById,
 } from "../controllers/user.controller.js";
 import { verifyJWT } from "../middleware/auth.middleware.js";
 import { upload } from "../middleware/multer.middleware.js";
@@ -56,6 +58,11 @@ router.route("/logout").post(verifyJWT, logoutUser);
 router.route("/update-profile").patch(verifyJWT, updateUserProfile);
 router.route("/change-password").post(verifyJWT, changeCurrentPassword);
 router.route("/update-avatar").patch(verifyJWT, upload.single("avatar"), updateAvatar);
+router.route("/update-resume").patch(verifyJWT, upload.single("resume"), updateResume);
 router.route("/search").get(verifyJWT, searchMentors);
+
+// IMPORTANT: yeh route sabse aakhir mein hona chahiye — warna yeh /search, /me
+// jaise literal paths ko bhi ":userId" samajh sakta hai
+router.route("/:userId").get(verifyJWT, getUserById);
 
 export default router;

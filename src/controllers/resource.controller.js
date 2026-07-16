@@ -4,6 +4,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { Resource } from "../models/resource.model.js";
 import { Connection } from "../models/connection.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import { createNotification } from "../utils/createNotification.js";
 
 const uploadResource = asyncHandler(async (req, res) => {
   const { title, description, subject, branch, visibility } = req.body;
@@ -82,6 +83,14 @@ const shareResourceWithUser = asyncHandler(async (req, res) => {
     resource.sharedWith.push(targetUserId);
   }
   await resource.save();
+
+  await createNotification({
+    user: targetUserId,
+    type: "resource_shared",
+    message: `${req.user.fullName} shared a resource with you: "${resource.title}"`,
+    relatedId: resource._id,
+    relatedModel: "Resource",
+  });
 
   return res
     .status(200)
