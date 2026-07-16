@@ -87,8 +87,8 @@ const getMyConnections = asyncHandler(async (req, res) => {
     status: "accepted",
     $or: [{ requester: userId }, { receiver: userId }],
   })
-    .populate("requester", "fullName avatar role branch company")
-    .populate("receiver", "fullName avatar role branch company");
+    .populate("requester", "fullName avatar Role branch company")
+    .populate("receiver", "fullName avatar Role branch company");
 
   return res
     .status(200)
@@ -99,7 +99,7 @@ const getPendingRequests = asyncHandler(async (req, res) => {
   const requests = await Connection.find({
     receiver: req.user._id,
     status: "pending",
-  }).populate("requester", "fullName avatar role branch company");
+  }).populate("requester", "fullName avatar Role branch company");
 
   return res
     .status(200)
@@ -110,7 +110,7 @@ const getSentRequests = asyncHandler(async (req, res) => {
   const requests = await Connection.find({
     requester: req.user._id,
     status: "pending",
-  }).populate("receiver", "fullName avatar role branch company");
+  }).populate("receiver", "fullName avatar Role branch company");
 
   return res
     .status(200)

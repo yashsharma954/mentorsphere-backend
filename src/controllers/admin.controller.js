@@ -7,10 +7,10 @@ import { Booking } from "../models/booking.model.js";
 import { Resource } from "../models/resource.model.js";
 
 const getAllUsers = asyncHandler(async (req, res) => {
-  const { role, page = 1, limit = 20 } = req.query;
+  const { Role, page = 1, limit = 20 } = req.query;
 
   const filter = {};
-  if (role) filter.role = role;
+  if (Role) filter.Role = Role;
 
   const users = await User.find(filter)
     .select("-password -refreshToken")
@@ -53,9 +53,9 @@ const getPlatformStats = asyncHandler(async (req, res) => {
     totalBookings,
     totalResources,
   ] = await Promise.all([
-    User.countDocuments({ role: "student" }),
-    User.countDocuments({ role: "mentor" }),
-    User.countDocuments({ role: "recruiter" }),
+    User.countDocuments({ Role: "student" }),
+    User.countDocuments({ Role: "mentor" }),
+    User.countDocuments({ Role: "recruiter" }),
     Connection.countDocuments({ status: "accepted" }),
     Booking.countDocuments({ status: { $ne: "cancelled" } }),
     Resource.countDocuments(),

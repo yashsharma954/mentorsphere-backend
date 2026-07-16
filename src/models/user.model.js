@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema(
       required: true,
       minlength: 6,
     },
-    role: {
+    Role: {
       type: String,
       enum: ["student", "mentor", "recruiter", "admin"],
       required: true,
@@ -83,7 +83,7 @@ userSchema.methods.generateAccessToken = function () {
       _id: this._id,
       email: this.email,
       fullName: this.fullName,
-      role: this.role,
+      Role: this.Role,
     },
     process.env.ACCESS_TOKEN_SECRET,
     { expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
@@ -98,7 +98,7 @@ userSchema.methods.generateRefreshToken = function () {
   );
 };
 
-userSchema.index({ role: 1, branch: 1 });
+userSchema.index({ Role: 1, branch: 1 });
 userSchema.index({ skills: 1 });
 
 export const User = mongoose.model("User", userSchema);

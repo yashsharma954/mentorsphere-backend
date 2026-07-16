@@ -99,7 +99,7 @@ const getAllConversations = asyncHandler(async (req, res) => {
       $project: {
         "user.fullName": 1,
         "user.avatar": 1,
-        "user.role": 1,
+        "user.Role": 1,
         lastMessage: 1,
         lastMessageAt: 1,
         unreadCount: 1,

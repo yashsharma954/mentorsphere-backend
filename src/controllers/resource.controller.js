@@ -44,7 +44,7 @@ const getPublicResources = asyncHandler(async (req, res) => {
   if (subject) filter.subject = subject;
 
   const resources = await Resource.find(filter)
-    .populate("uploadedBy", "fullName avatar role")
+    .populate("uploadedBy", "fullName avatar Role")
     .sort({ createdAt: -1 });
 
   return res
@@ -100,7 +100,7 @@ const shareResourceWithUser = asyncHandler(async (req, res) => {
 const getSharedResources = asyncHandler(async (req, res) => {
   const resources = await Resource.find({ sharedWith: req.user._id }).populate(
     "uploadedBy",
-    "fullName avatar role"
+    "fullName avatar Role"
   );
 
   return res
@@ -119,7 +119,7 @@ const deleteResource = asyncHandler(async (req, res) => {
 
   const isOwner = resource.uploadedBy.toString() === req.user._id.toString();
 
-  if (!isOwner && req.user.role !== "admin") {
+  if (!isOwner && req.user.Role !== "admin") {
     throw new ApiError(403, "You are not Authorized to delete this resource");
   }
 

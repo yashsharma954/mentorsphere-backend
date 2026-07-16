@@ -8,7 +8,7 @@ import { createNotification } from "../utils/createNotification.js";
 const addAvailableSlot = asyncHandler(async (req, res) => {
   const { day, time } = req.body;
 
-  if (req.user.role !== "mentor") {
+  if (req.user.Role !== "mentor") {
     throw new ApiError(403, "Only mentors can add available slots");
   }
 
@@ -44,7 +44,7 @@ const removeAvailableSlot = asyncHandler(async (req, res) => {
 const getMentorSlots = asyncHandler(async (req, res) => {
   const { mentorId } = req.params;
 
-  const mentor = await User.findOne({ _id: mentorId, role: "mentor" }).select(
+  const mentor = await User.findOne({ _id: mentorId, Role: "mentor" }).select(
     "availableSlots fullName"
   );
 
@@ -67,7 +67,7 @@ const bookSlot = asyncHandler(async (req, res) => {
     throw new ApiError(400, "mentorId, day and time are required");
   }
 
-  const mentor = await User.findOne({ _id: mentorId, role: "mentor" });
+  const mentor = await User.findOne({ _id: mentorId, Role: "mentor" });
 
   if (!mentor) {
     throw new ApiError(404, "Mentor not found");
@@ -141,7 +141,7 @@ const cancelBooking = asyncHandler(async (req, res) => {
 const getMyBookings = asyncHandler(async (req, res) => {
   const userId = req.user._id;
 
-  const filter = req.user.role === "mentor" ? { mentor: userId } : { student: userId };
+  const filter = req.user.Role === "mentor" ? { mentor: userId } : { student: userId };
 
   const bookings = await Booking.find(filter)
     .populate("mentor", "fullName avatar company")

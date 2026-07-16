@@ -41,7 +41,7 @@ app.use(cookieParser());
 //             email: profile.emails[0].value,
 //             googleId: profile.id,
 //             avatar: profile.photos?.[0]?.value || "",
-//             role: "student", // Google signup default role — profile pe baad mein change ho sakta hai
+//             Role: "student", // Google signup default Role — profile pe baad mein change ho sakta hai
 //           });
 //         }
 

@@ -30,7 +30,7 @@ const generateAccessAndRefereshTokens = async (userId) => {
 };
 
 const registeruser = asyncHandler(async (req, res) => {
-  const { fullName, email, password, role } = req.body;
+  const { fullName, email, password, Role } = req.body;
 
   if (!fullName) {
     throw new ApiError(400, "fullName is required");
@@ -41,8 +41,8 @@ const registeruser = asyncHandler(async (req, res) => {
   if (!password) {
     throw new ApiError(400, "password is required");
   }
-  if (!role || !["student", "mentor", "recruiter"].includes(role)) {
-    throw new ApiError(400, "role must be one of: student, mentor, recruiter");
+  if (!Role || !["student", "mentor", "recruiter"].includes(Role)) {
+    throw new ApiError(400, "Role must be one of: student, mentor, recruiter");
   }
 
   const existedUser = await User.findOne({ email });
@@ -55,7 +55,7 @@ const registeruser = asyncHandler(async (req, res) => {
     fullName,
     email,
     password,
-    role,
+    Role,
   });
 
   const createdUser = await User.findById(user._id).select(
@@ -278,10 +278,10 @@ const updateResume = asyncHandler(async (req, res) => {
 });
 
 const searchMentors = asyncHandler(async (req, res) => {
-  const { role, branch, skills, year, name } = req.query;
+  const { Role, branch, skills, year, name } = req.query;
 
   const filter = {};
-  if (role) filter.role = role;
+  if (Role) filter.Role = Role;
   if (branch) filter.branch = branch;
   if (year) filter.year = year;
   if (skills) filter.skills = { $in: skills.split(",") };
