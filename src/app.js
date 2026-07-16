@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 // import passport from "passport";
-// import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+// import { Strategy as GoogleStrategy } from "passport-google-oAuth20";
 import { User } from "./models/user.model.js";
 
 const app = express();

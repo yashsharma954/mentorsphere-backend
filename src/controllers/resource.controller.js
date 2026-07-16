@@ -120,7 +120,7 @@ const deleteResource = asyncHandler(async (req, res) => {
   const isOwner = resource.uploadedBy.toString() === req.user._id.toString();
 
   if (!isOwner && req.user.role !== "admin") {
-    throw new ApiError(403, "You are not authorized to delete this resource");
+    throw new ApiError(403, "You are not Authorized to delete this resource");
   }
 
   await resource.deleteOne();

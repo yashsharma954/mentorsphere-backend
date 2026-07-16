@@ -59,7 +59,7 @@ const respondToConnectionRequest = asyncHandler(async (req, res) => {
   }
 
   if (connection.receiver.toString() !== req.user._id.toString()) {
-    throw new ApiError(403, "You are not authorized to respond to this request");
+    throw new ApiError(403, "You are not Authorized to respond to this request");
   }
 
   connection.status = action === "accept" ? "accepted" : "rejected";

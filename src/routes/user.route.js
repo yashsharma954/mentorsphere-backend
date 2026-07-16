@@ -25,27 +25,27 @@ router.route("/login").post(loginuser);
 router.route("/refresh-token").post(refreshAccessToken);
 
 // Google OAuth
-// router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
+// router.get("/google", passport.Authenticate("google", { scope: ["profile", "email"] }));
 // router.get(
 //   "/google/callback",
-//   passport.authenticate("google", {
-//     failureRedirect: "/auth?error=google_failed",
+//   passport.Authenticate("google", {
+//     failureRedirect: "/Auth?error=google_failed",
 //     session: false,
 //   }),
 //   async (req, res) => {
 //     try {
 //       if (!req.user) {
-//         return res.redirect("/auth?error=user_not_found");
+//         return res.redirect("/Auth?error=user_not_found");
 //       }
 
 //       const accessToken = req.user.generateAccessToken();
 
 //       res.redirect(
-//         `https://aifrontend-ce3u.vercel.app/auth?token=${accessToken}&userId=${req.user._id}`
+//         `https://aifrontend-ce3u.vercel.app/Auth?token=${accessToken}&userId=${req.user._id}`
 //       );
 //     } catch (error) {
 //       console.error("Google Callback Error:", error);
-//       res.redirect("/auth?error=server_error");
+//       res.redirect("/Auth?error=server_error");
 //     }
 //   }
 // );

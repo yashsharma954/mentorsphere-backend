@@ -1,12 +1,12 @@
 import { Router } from "express";
 import { getAllUsers, deleteUser, getPlatformStats } from "../controllers/admin.controller.js";
-import { verifyJWT } from "../middleware/auth.middleware.js";
-import { authorizeRoles } from "../middleware/role.middleware.js";
+import { verifyJWT } from "../middleware/Auth.middleware.js";
+import { AuthorizeRoles } from "../middleware/role.middleware.js";
 
 const router = Router();
 
 // Sab admin routes: pehle login check, phir role check
-router.use(verifyJWT, authorizeRoles("admin"));
+router.use(verifyJWT, AuthorizeRoles("admin"));
 
 router.route("/users").get(getAllUsers);
 router.route("/users/:userId").delete(deleteUser);

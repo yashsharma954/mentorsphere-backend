@@ -121,7 +121,7 @@ const cancelBooking = asyncHandler(async (req, res) => {
     booking.student.toString() === req.user._id.toString();
 
   if (!isParticipant) {
-    throw new ApiError(403, "You are not authorized to cancel this booking");
+    throw new ApiError(403, "You are not Authorized to cancel this booking");
   }
 
   booking.status = "cancelled";
