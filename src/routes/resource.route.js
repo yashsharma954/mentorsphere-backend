@@ -7,7 +7,7 @@ import {
   deleteResource,
   downloadResource,
 } from "../controllers/resource.controller.js";
-import { verifyJWT } from "../middleware/auth.middleware.js";
+import { verifyJWT } from "../middleware/Auth.middleware.js";
 import { upload } from "../middleware/multer.middleware.js";
 
 const router = Router();

@@ -6,7 +6,7 @@ import {
   getPendingRequests,
   getSentRequests,
 } from "../controllers/connection.controller.js";
-import { verifyJWT } from "../middleware/auth.middleware.js";
+import { verifyJWT } from "../middleware/Auth.middleware.js";
 
 const router = Router();
 

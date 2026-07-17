@@ -13,7 +13,7 @@ import {
   searchMentors,
   getUserById,
 } from "../controllers/user.controller.js";
-import { verifyJWT } from "../middleware/auth.middleware.js";
+import { verifyJWT } from "../middleware/Auth.middleware.js";
 import { upload } from "../middleware/multer.middleware.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 

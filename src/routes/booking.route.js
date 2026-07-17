@@ -7,7 +7,7 @@ import {
   cancelBooking,
   getMyBookings,
 } from "../controllers/booking.controller.js";
-import { verifyJWT } from "../middleware/auth.middleware.js";
+import { verifyJWT } from "../middleware/Auth.middleware.js";
 
 const router = Router();
 

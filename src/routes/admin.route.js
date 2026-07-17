@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { getAllUsers, deleteUser, getPlatformStats } from "../controllers/admin.controller.js";
-import { verifyJWT } from "../middleware/auth.middleware.js";
+import { verifyJWT } from "../middleware/Auth.middleware.js";
 import { authorizeRoles } from "../middleware/Role.middleware.js";
 
 const router = Router();
