@@ -43,7 +43,7 @@ const deleteUser = asyncHandler(async (req, res) => {
   return res.status(200).json(new ApiResponse(200, {}, "User deleted successfully"));
 });
 
-// Admin dashboard overview ke liye
+// Admin Dashboard overview ke liye
 const getPlatformStats = asyncHandler(async (req, res) => {
   const [
     totalStudents,

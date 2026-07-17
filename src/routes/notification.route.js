@@ -4,7 +4,7 @@ import {
   markAsRead,
   markAllAsRead,
 } from "../controllers/notification.controller.js";
-import { verifyJWT } from "../middleware/Auth.middleware.js";
+import { verifyJWT } from "../middleware/auth.middleware.js";
 
 const router = Router();
 

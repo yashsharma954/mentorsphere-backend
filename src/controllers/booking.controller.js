@@ -121,13 +121,13 @@ const cancelBooking = asyncHandler(async (req, res) => {
     booking.student.toString() === req.user._id.toString();
 
   if (!isParticipant) {
-    throw new ApiError(403, "You are not Authorized to cancel this booking");
+    throw new ApiError(403, "You are not authorized to cancel this booking");
   }
 
   booking.status = "cancelled";
   await booking.save();
 
-  // Slot ko wapas free karo mentor ke profile mein
+  // Slot ko wapas free karo mentor ke Profile mein
   await User.updateOne(
     { _id: booking.mentor, "availableSlots.day": booking.day, "availableSlots.time": booking.time },
     { $set: { "availableSlots.$.booked": false } }
@@ -143,14 +143,14 @@ const getMyBookings = asyncHandler(async (req, res) => {
 
   const filter = req.user.Role === "mentor" ? { mentor: userId } : { student: userId };
 
-  const bookings = await Booking.find(filter)
+  const Bookings = await Booking.find(filter)
     .populate("mentor", "fullName avatar company")
     .populate("student", "fullName avatar branch")
     .sort({ createdAt: -1 });
 
   return res
     .status(200)
-    .json(new ApiResponse(200, bookings, "Bookings fetched successfully"));
+    .json(new ApiResponse(200, Bookings, "Bookings fetched successfully"));
 });
 
 export {

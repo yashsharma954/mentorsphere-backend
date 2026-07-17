@@ -7,12 +7,12 @@ import {
   deleteResource,
   downloadResource,
 } from "../controllers/resource.controller.js";
-import { verifyJWT } from "../middleware/Auth.middleware.js";
+import { verifyJWT } from "../middleware/auth.middleware.js";
 import { upload } from "../middleware/multer.middleware.js";
 
 const router = Router();
 
-// Public library dekhna login ke bina bhi allow kar sakte ho, chaho to yahan se verifyJWT hata dena
+// Public library dekhna Login ke bina bhi allow kar sakte ho, chaho to yahan se verifyJWT hata dena
 router.route("/public").get(getPublicResources);
 
 router.use(verifyJWT);

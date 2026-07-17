@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const resourceSchema = new mongoose.Schema(
+const Resourceschema = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -42,6 +42,6 @@ const resourceSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-resourceSchema.index({ branch: 1, subject: 1, visibility: 1 });
+Resourceschema.index({ branch: 1, subject: 1, visibility: 1 });
 
-export const Resource = mongoose.model("Resource", resourceSchema);
+export const Resource = mongoose.model("Resource", Resourceschema);

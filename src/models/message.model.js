@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const messageSchema = new mongoose.Schema(
+const Messageschema = new mongoose.Schema(
   {
     sender: {
       type: mongoose.Schema.Types.ObjectId,
@@ -25,6 +25,6 @@ const messageSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-messageSchema.index({ sender: 1, receiver: 1, createdAt: 1 });
+Messageschema.index({ sender: 1, receiver: 1, createdAt: 1 });
 
-export const Message = mongoose.model("Message", messageSchema);
+export const Message = mongoose.model("Message", Messageschema);

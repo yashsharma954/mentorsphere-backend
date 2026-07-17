@@ -48,7 +48,7 @@ const getConversation = asyncHandler(async (req, res) => {
   const myId = req.user._id;
   const { page = 1, limit = 30 } = req.query;
 
-  const messages = await Message.find({
+  const Messages = await Message.find({
     $or: [
       { sender: myId, receiver: userId },
       { sender: userId, receiver: myId },
@@ -60,7 +60,7 @@ const getConversation = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, messages.reverse(), "Conversation fetched successfully"));
+    .json(new ApiResponse(200, Messages.reverse(), "Conversation fetched successfully"));
 });
 
 // Sidebar list ke liye — har conversation ka last message + unread count

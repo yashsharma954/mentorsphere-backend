@@ -29,7 +29,7 @@ const generateAccessAndRefereshTokens = async (userId) => {
   }
 };
 
-const registeruser = asyncHandler(async (req, res) => {
+const Registeruser = asyncHandler(async (req, res) => {
   const { fullName, email, password, Role } = req.body;
 
   if (!fullName) {
@@ -63,15 +63,15 @@ const registeruser = asyncHandler(async (req, res) => {
   );
 
   if (!createdUser) {
-    throw new ApiError(500, "Something went wrong while registering the user");
+    throw new ApiError(500, "Something went wrong while Registering the user");
   }
 
   return res
     .status(201)
-    .json(new ApiResponse(200, createdUser, "User registered Successfully"));
+    .json(new ApiResponse(200, createdUser, "User Registered Successfully"));
 });
 
-const loginuser = asyncHandler(async (req, res) => {
+const Loginuser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   if (!email) {
@@ -128,7 +128,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
   const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken;
 
   if (!incomingRefreshToken) {
-    throw new ApiError(401, "UnAuthorized request");
+    throw new ApiError(401, "Unauthorized request");
   }
 
   try {
@@ -172,7 +172,7 @@ const getCurrentUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, req.user, "Current user fetched successfully"));
 });
 
-const updateUserProfile = asyncHandler(async (req, res) => {
+const updateUserprofile = asyncHandler(async (req, res) => {
   const {
     bio,
     branch,
@@ -294,7 +294,7 @@ const searchMentors = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, users, "Users fetched successfully"));
 });
 
-// Kisi bhi user ka public profile — search/connections list se click karke dekhne ke liye
+// Kisi bhi user ka public Profile — search/Connections list se click karke dekhne ke liye
 const getUserById = asyncHandler(async (req, res) => {
   const { userId } = req.params;
 
@@ -306,16 +306,16 @@ const getUserById = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, user, "User profile fetched successfully"));
+    .json(new ApiResponse(200, user, "User Profile fetched successfully"));
 });
 
 export {
-  registeruser,
-  loginuser,
+  Registeruser,
+  Loginuser,
   logoutUser,
   refreshAccessToken,
   getCurrentUser,
-  updateUserProfile,
+  updateUserprofile,
   changeCurrentPassword,
   updateAvatar,
   updateResume,

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const connectionSchema = new mongoose.Schema(
+const Connectionschema = new mongoose.Schema(
   {
     requester: {
       type: mongoose.Schema.Types.ObjectId,
@@ -25,6 +25,6 @@ const connectionSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-connectionSchema.index({ requester: 1, receiver: 1 }, { unique: true });
+Connectionschema.index({ requester: 1, receiver: 1 }, { unique: true });
 
-export const Connection = mongoose.model("Connection", connectionSchema);
+export const Connection = mongoose.model("Connection", Connectionschema);

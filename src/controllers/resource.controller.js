@@ -43,13 +43,13 @@ const getPublicResources = asyncHandler(async (req, res) => {
   if (branch) filter.branch = branch;
   if (subject) filter.subject = subject;
 
-  const resources = await Resource.find(filter)
+  const Resources = await Resource.find(filter)
     .populate("uploadedBy", "fullName avatar Role")
     .sort({ createdAt: -1 });
 
   return res
     .status(200)
-    .json(new ApiResponse(200, resources, "Public resources fetched successfully"));
+    .json(new ApiResponse(200, Resources, "Public Resources fetched successfully"));
 });
 
 const shareResourceWithUser = asyncHandler(async (req, res) => {
@@ -63,7 +63,7 @@ const shareResourceWithUser = asyncHandler(async (req, res) => {
   }
 
   if (resource.uploadedBy.toString() !== req.user._id.toString()) {
-    throw new ApiError(403, "You can only share resources you uploaded");
+    throw new ApiError(403, "You can only share Resources you uploaded");
   }
 
   const isConnected = await Connection.findOne({
@@ -75,7 +75,7 @@ const shareResourceWithUser = asyncHandler(async (req, res) => {
   });
 
   if (!isConnected) {
-    throw new ApiError(403, "You can only share resources with your connections");
+    throw new ApiError(403, "You can only share Resources with your Connections");
   }
 
   resource.visibility = "connection-only";
@@ -98,14 +98,14 @@ const shareResourceWithUser = asyncHandler(async (req, res) => {
 });
 
 const getSharedResources = asyncHandler(async (req, res) => {
-  const resources = await Resource.find({ sharedWith: req.user._id }).populate(
+  const Resources = await Resource.find({ sharedWith: req.user._id }).populate(
     "uploadedBy",
     "fullName avatar Role"
   );
 
   return res
     .status(200)
-    .json(new ApiResponse(200, resources, "Shared resources fetched successfully"));
+    .json(new ApiResponse(200, Resources, "Shared Resources fetched successfully"));
 });
 
 const deleteResource = asyncHandler(async (req, res) => {
@@ -120,7 +120,7 @@ const deleteResource = asyncHandler(async (req, res) => {
   const isOwner = resource.uploadedBy.toString() === req.user._id.toString();
 
   if (!isOwner && req.user.Role !== "admin") {
-    throw new ApiError(403, "You are not Authorized to delete this resource");
+    throw new ApiError(403, "You are not authorized to delete this resource");
   }
 
   await resource.deleteOne();

@@ -59,7 +59,7 @@ const respondToConnectionRequest = asyncHandler(async (req, res) => {
   }
 
   if (connection.receiver.toString() !== req.user._id.toString()) {
-    throw new ApiError(403, "You are not Authorized to respond to this request");
+    throw new ApiError(403, "You are not authorized to respond to this request");
   }
 
   connection.status = action === "accept" ? "accepted" : "rejected";
@@ -83,7 +83,7 @@ const respondToConnectionRequest = asyncHandler(async (req, res) => {
 const getMyConnections = asyncHandler(async (req, res) => {
   const userId = req.user._id;
 
-  const connections = await Connection.find({
+  const Connections = await Connection.find({
     status: "accepted",
     $or: [{ requester: userId }, { receiver: userId }],
   })
@@ -92,7 +92,7 @@ const getMyConnections = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, connections, "Connections fetched successfully"));
+    .json(new ApiResponse(200, Connections, "Connections fetched successfully"));
 });
 
 const getPendingRequests = asyncHandler(async (req, res) => {
