@@ -1,8 +1,7 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-// import passport from "passport";
-// import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+
 import { User } from "./models/user.model.js";
 
 const app = express();
@@ -10,7 +9,7 @@ const app = express();
 app.use(
   cors({
     // credentials:true ke saath origin "*" nahi ho sakta — exact frontend URL chahiye
-    origin: true,
+    origin: "https://mentorsphereai-frontend.vercel.app",
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "authorization"],
@@ -21,37 +20,7 @@ app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
 app.use(cookieParser());
-// app.use(passport.initialize());
 
-// passport.use(
-//   new GoogleStrategy(
-//     {
-//       clientID: process.env.GOOGLE_CLIENT_ID,
-//       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-//       callbackURL: "https://aibackend-ocu5.onrender.com/api/v1/user/google/callback",
-//       scope: ["Profile", "email"],
-//     },
-//     async (accessToken, refreshToken, Profile, done) => {
-//       try {
-//         let user = await User.findOne({ email: Profile.emails[0].value });
-
-//         if (!user) {
-//           user = await User.create({
-//             fullName: Profile.displayName,
-//             email: Profile.emails[0].value,
-//             googleId: Profile.id,
-//             avatar: Profile.photos?.[0]?.value || "",
-//             Role: "student", // Google signup default Role — Profile pe baad mein change ho sakta hai
-//           });
-//         }
-
-//         return done(null, user);
-//       } catch (err) {
-//         return done(err, null);
-//       }
-//     }
-//   )
-// );
 
 import userRoutes from "./routes/user.route.js";
 import connectionRoutes from "./routes/connection.route.js";
